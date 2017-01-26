@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "author": "Mux, Inc.",
   "description": "Mux analytics plugin for <player name>",
-  "main": "dist/player-mux.js",
+  "main": "dist/yourPlayer-mux.js",
   "scripts": {
     "nsp": "nsp check",
     "clean": "rm -rf dist build",
@@ -11,10 +11,10 @@
     "lint": "eslint 'src/*.js' --quiet",
     "test": "npm-run-all lint",
     "build": "npm-run-all nsp clean test mkdirs build:browserify build:bannerize build:uglify build:dist",
-    "build:bannerize": "bannerize build/player-mux.debug.js --banner=scripts/banner.ejs",
-    "build:browserify": "browserify src/index.js --standalone initPlayerMux -o build/player-mux.debug.js",
-    "build:uglify": "uglifyjs build/ooyala-mux.debug.js --comments --mangle --compress -o build/ooyala-mux.js",
-    "build:dist": "cp build/ooyala-mux.js dist/ooyala-mux.js",
+    "build:bannerize": "bannerize build/yourPlayer-mux.debug.js --banner=scripts/banner.ejs",
+    "build:browserify": "browserify src/index.js --standalone initYourPlayerMux -o build/yourPlayer-mux.debug.js",
+    "build:uglify": "uglifyjs build/yourPlayer-mux.debug.js --comments --mangle --compress -o build/yourPlayer-mux.js",
+    "build:dist": "cp build/yourPlayer-mux.js dist/yourPlayer-mux.js",
     "start": "babel-node scripts/server.js",
     "deploy": "npm run build && babel-node scripts/deploy.js"
   },

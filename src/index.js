@@ -1,17 +1,17 @@
 import assign from 'lodash.assign';
-import window from 'global/window'; // Remove if you do not need to access the global `window`
-import document from 'global/document'; // Remove if you do not need to access the global `document`
+// import window from 'global/window'; // Remove if you do not need to access the global `window`
+// import document from 'global/document'; // Remove if you do not need to access the global `document`
 import mux from 'mux-embed';
 
 // Helper function to generate "unique" IDs for the player if your player does not have one built in
-let generateShortID = function () {
+let generateShortId = function () {
   return ('000000' + (Math.random() * Math.pow(36, 6) << 0).toString(36)).slice(-6);
 };
 
 module.exports = (function () {
   const log = mux.utils.log;
   const secondsToMs = mux.utils.secondsToMs;
-  const getComputedStyle = mux.utils.getComputedStyle; // Helper function, same return as getComputedStyle in HTML5
+  // const getComputedStyle = mux.utils.getComputedStyle; // Helper function, same return as getComputedStyle in HTML5
 
   const initYourPlayerMux = function (player, options) {
     // Make sure we got a player - Check properties to ensure that a player was passed
@@ -69,7 +69,7 @@ module.exports = (function () {
         // You _should_ only provide these values if they are defined (i.e. not 'undefined')
         player_is_paused: player.isPaused(), // Return whether the player is paused, stopped, or complete (i.e. in any state that is not actively trying to play back the video)
         player_width: player.getWidth(), // Return the width, in pixels, of the player on screen
-        player_width: player.getHeight(), // Return the height, in pixels, of the player on screen
+        player_height: player.getHeight(), // Return the height, in pixels, of the player on screen
         video_source_height: player.currentSource().height, // Return the height, in pixels, of the current rendition playing in the player
         video_source_width: player.currentSource().width, // Return the height, in pixels, of the current rendition playing in the player
 
@@ -86,7 +86,7 @@ module.exports = (function () {
         video_poster_url: player.poster().url(), // Return the URL of the poster image used
         player_language_code: player.language() // Return the language code (e.g. `en`, `en-us`)
       };
-    }
+    };
 
     // The following are linking events that the Mux core SDK requires with events from the player.
     // There may be some cases where the player will send the same Mux event on multiple different
