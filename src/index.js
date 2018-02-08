@@ -29,7 +29,7 @@ const initYourPlayerMux = function (player, options) {
     player_software_name: 'Your Player',
     player_software_version: player.getVersion(), // Replace with method to retrieve the version of the player as necessary
     player_mux_plugin_name: 'yourplayer-mux',
-    player_mux_plugin_version: '__VERSION__'
+    player_mux_plugin_version: '[AIV]{version}[/AIV]'
   }, options.data);
 
   // Retrieve the ID and the player element
