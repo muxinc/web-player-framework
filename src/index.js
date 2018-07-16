@@ -4,7 +4,7 @@ import mux from 'mux-embed';
 
 const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
-const assign = mux.util.assign;
+const assign = mux.utils.assign;
 // const getComputedStyle = mux.utils.getComputedStyle; // If necessary to get
 
 // Helper function to generate "unique" IDs for the player if your player does not have one built in
