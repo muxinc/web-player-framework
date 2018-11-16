@@ -7,12 +7,18 @@
   <div id='playerwrapper'>
     <!-- embed your player here, vanilla, no ads -->
   </div>
-  <script src='./yourPlayer-mux.debug.js'></script>
+  <script src='./yourPlayer-mux.js'></script>
   <script>
     // Get a reference to your player, and pass it to the init function
     var player;
 
-    initYourPlayerMux(player);
+    initYourPlayerMux(player, {
+      debug: true,
+      data: {
+        env_key: 'YOUR_ENV_KEY',
+        video_title: 'SAMPLE_TITLE'
+      }
+    });
   </script>
 </body>
 </html>
