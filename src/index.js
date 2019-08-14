@@ -1,5 +1,5 @@
 // import window from 'global/window'; // Remove if you do not need to access the global `window`
-// import document from 'global/document'; // Remove if you do not need to access the global `document`
+import document from 'global/document'; // Remove if you do not need to access the global `document`
 import mux from 'mux-embed';
 
 const log = mux.log;
@@ -17,6 +17,15 @@ const initShakaPlayerMux = function (player, options) {
   if (typeof player !== 'object' || typeof player.constructor.version === 'undefined') {
     log.warn('[shakaPlayer-mux] You must provide a valid shakaPlayer to initShakaPlayerMux.');
     return;
+  }
+
+  const getVideoElementProp = (prop) => {
+    return player.getMediaElement() && player.getMediaElement()[prop];
+  }
+
+  const isPreload = () => {
+    const preload = getVideoElementProp('preload');
+    return (preload === "auto" || preload === "metadata");
   }
 
   // Accessor for event namespace if used by your player
@@ -44,7 +53,7 @@ const initShakaPlayerMux = function (player, options) {
   // Allow mux to retrieve the current time - used to track buffering from the mux side
   // Return current playhead time in milliseconds
   options.getPlayheadTime = () => {
-    return secondsToMs(player.currentTime());
+    return secondsToMs(getVideoElementProp('currentTime'));
   };
 
   // Allow mux to automatically retrieve state information about the player on each event sent
@@ -66,24 +75,24 @@ const initShakaPlayerMux = function (player, options) {
     return {
       // Required properties - these must be provided every time this is called
       // You _should_ only provide these values if they are defined (i.e. not 'undefined')
-      player_is_paused: player.isPaused(), // Return whether the player is paused, stopped, or complete (i.e. in any state that is not actively trying to play back the video)
-      player_width: player.getWidth(), // Return the width, in pixels, of the player on screen
-      player_height: player.getHeight(), // Return the height, in pixels, of the player on screen
-      video_source_height: player.currentSource().height, // Return the height, in pixels, of the current rendition playing in the player
-      video_source_width: player.currentSource().width, // Return the height, in pixels, of the current rendition playing in the player
+      player_is_paused: getVideoElementProp('paused'), // Return whether the player is paused, stopped, or complete (i.e. in any state that is not actively trying to play back the video)
+      player_width: getVideoElementProp('offsetWidth'), // Return the width, in pixels, of the player on screen
+      player_height: getVideoElementProp('offsetHeight'), // Return the height, in pixels, of the player on screen
+      video_source_height: player.getStats().height, // Return the height, in pixels, of the current rendition playing in the player
+      video_source_width: player.getStats().width, // Return the height, in pixels, of the current rendition playing in the player
 
       // Preferred properties - these should be provided in this callback if possible
       // If any are missing, that is okay, but this will be a lack of data for the customer at a later time
-      player_is_fullscreen: player.isFullscreen(), // Return true if the player is fullscreen
-      player_autoplay_on: player.autoplay(), // Return true if the player is autoplay
-      player_preload_on: player.preload(), // Return true if the player is preloading data (metadata, on, auto are all "true")
-      video_source_url: player.src().url, // Return the playback URL (i.e. URL to master manifest or MP4 file)
-      video_source_mime_type: player.src().mimeType, // Return the mime type (if possible), otherwise the source type (hls, dash, mp4, flv, etc)
-      video_source_duration: secondsToMs(player.getDuration()), // Return the duration of the source as reported by the player (could be different than is reported by the customer)
+      player_is_fullscreen: document.fullscreenElement && (document.fullscreenElement === player.getMediaElement()), // Return true if the player is fullscreen
+      player_autoplay_on: getVideoElementProp('autoplay'), // Return true if the player is autoplay
+      player_preload_on: isPreload(), // Return true if the player is preloading data (metadata, on, auto are all "true")
+      video_source_url: player.getAssetUri(), // Return the playback URL (i.e. URL to master manifest or MP4 file)
+      // video_source_mime_type: player.src().mimeType, // Return the mime type (if possible), otherwise the source type (hls, dash, mp4, flv, etc)
+      video_source_duration: secondsToMs(getVideoElementProp('duration')), // Return the duration of the source as reported by the player (could be different than is reported by the customer)
 
       // Optional properties - if you have them, send them, but if not, no big deal
-      video_poster_url: player.poster().url(), // Return the URL of the poster image used
-      player_language_code: player.language() // Return the language code (e.g. `en`, `en-us`)
+      video_poster_url: getVideoElementProp('poster'), // Return the URL of the poster image used
+      player_language_code: getVideoElementProp('lang') // Return the language code (e.g. `en`, `en-us`)
     };
   };
 

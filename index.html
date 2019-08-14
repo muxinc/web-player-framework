@@ -2,51 +2,61 @@
 <html>
 <head>
   <!-- <script src='http://localhost:8000/dist/shaka-player.compiled.debug.js'></script> -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/2.5.4/shaka-player.compiled.debug.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/2.5.4/shaka-player.compiled.js'></script>
 </head>
 <body>
-  <div id='playerwrapper'>
-    <video id="video"
+  <div id='playerwrapper1'>
+    <video id="video1"
            width="640"
            poster="//shaka-player-demo.appspot.com/assets/poster.jpg"
            controls autoplay></video>
   </div>
+
+  <div id='playerwrapper2'>
+    <video id="video2"
+           width="640"
+           poster="//shaka-player-demo.appspot.com/assets/poster.jpg"
+           controls autoplay></video>
+  </div>
+
   <script src='./shakaPlayer-mux.js'></script>
   <script>
     var manifestUri =
-    'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
+     'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 
-    function initApp() {
+    function initApp(id) {
       // Install built-in polyfills to patch browser incompatibilities.
       shaka.polyfill.installAll();
 
       // Check to see if the browser supports the basic APIs Shaka needs.
       if (shaka.Player.isBrowserSupported()) {
         // Everything looks good!
-        initPlayer();
+        initPlayer(id);
       } else {
         // This browser does not have the minimum set of APIs we need.
         console.error('Browser not supported!');
       }
     }
 
-    function initPlayer() {
+    function initPlayer(id) {
       // Create a Player instance.
-      var video = document.getElementById('video');
-      var player = new shaka.Player(video);
-      window.player = player;
+      const video = document.getElementById(id);
+      const player = new shaka.Player(video);
+      window[`player_${id}`] = player;
+      window[id] = video;
       player.load(manifestUri);
 
       initShakaPlayerMux(player, {
-         debug: true,
-         data: {
-           env_key: 'YOUR_ENV_KEY',
-           video_title: 'SAMPLE_TITLE'
-         }
+        debug: true,
+        data: {
+          env_key: 'YOUR_ENV_KEY',
+          video_title: 'SAMPLE_TITLE'
+        }
       });
     }
 
-    initApp();
+    initApp('video1');
+    initApp('video2');
   </script>
 </body>
 </html>
