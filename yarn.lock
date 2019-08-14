@@ -3685,7 +3685,7 @@ mute-stream@0.0.5:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.5.tgz#8fbfabb0a98a253d3184331f9e8deb7372fac6c0"
   integrity sha1-j7+rsKmKJT0xhDMfno3rc3L6xsA=
 
-mux-embed@^2.5.0:
+mux-embed@^2.7.0:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/mux-embed/-/mux-embed-2.7.1.tgz#3926e9448cd21e630c09101b5bcc322e7db26a9c"
   integrity sha512-NB07zB/fI6jNmlPbTVuN3AXYFudnaGw7h0Ufk5qdGVBnIyGYzYL6kaMJL1IGm3dAJvXxlDI1oqhgf4qcyGqoPA==
