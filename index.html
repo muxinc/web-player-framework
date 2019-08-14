@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src='//path/to/your/player.min.js'></script>
+  <!-- <script src='http://localhost:8000/dist/shaka-player.compiled.debug.js'></script> -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/2.5.4/shaka-player.compiled.debug.js'></script>
 </head>
 <body>
   <div id='playerwrapper'>
-    <!-- embed your player here, vanilla, no ads -->
+    <video id="video"
+           width="640"
+           poster="//shaka-player-demo.appspot.com/assets/poster.jpg"
+           controls autoplay></video>
   </div>
-  <script src='./yourPlayer-mux.js'></script>
+  <script src='./shakaPlayer-mux.js'></script>
   <script>
-    // Get a reference to your player, and pass it to the init function
-    var player;
+    var manifestUri =
+    'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
 
-    initYourPlayerMux(player, {
-      debug: true,
-      data: {
-        env_key: 'YOUR_ENV_KEY',
-        video_title: 'SAMPLE_TITLE'
+    function initApp() {
+      // Install built-in polyfills to patch browser incompatibilities.
+      shaka.polyfill.installAll();
+
+      // Check to see if the browser supports the basic APIs Shaka needs.
+      if (shaka.Player.isBrowserSupported()) {
+        // Everything looks good!
+        initPlayer();
+      } else {
+        // This browser does not have the minimum set of APIs we need.
+        console.error('Browser not supported!');
       }
-    });
+    }
+
+    function initPlayer() {
+      // Create a Player instance.
+      var video = document.getElementById('video');
+      var player = new shaka.Player(video);
+      window.player = player;
+      player.load(manifestUri);
+
+      initShakaPlayerMux(player, {
+         debug: true,
+         data: {
+           env_key: 'YOUR_ENV_KEY',
+           video_title: 'SAMPLE_TITLE'
+         }
+      });
+    }
+
+    initApp();
   </script>
 </body>
 </html>

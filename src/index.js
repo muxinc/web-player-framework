@@ -12,23 +12,23 @@ const generateShortId = function () {
   return ('000000' + (Math.random() * Math.pow(36, 6) << 0).toString(36)).slice(-6);
 };
 
-const initYourPlayerMux = function (player, options) {
+const initShakaPlayerMux = function (player, options) {
   // Make sure we got a player - Check properties to ensure that a player was passed
-  if (typeof player !== 'object' || typeof player.getVersion !== 'function') {
-    log.warn('[yourPlayer-mux] You must provide a valid yourPlayer to initYourPlayerMux.');
+  if (typeof player !== 'object' || typeof player.constructor.version === 'undefined') {
+    log.warn('[shakaPlayer-mux] You must provide a valid shakaPlayer to initShakaPlayerMux.');
     return;
   }
 
   // Accessor for event namespace if used by your player
-  // const YOURPLAYER_EVENTS = || {};
+  // const SHAKAPLAYER_EVENTS = || {};
 
   // Prepare the data passed in
   options = options || {};
 
   options.data = assign({
     player_software_name: 'Your Player',
-    player_software_version: player.getVersion(), // Replace with method to retrieve the version of the player as necessary
-    player_mux_plugin_name: 'yourplayer-mux',
+    player_software_version: player.constructor.version, // Replace with method to retrieve the version of the player as necessary
+    player_mux_plugin_name: 'shakaplayer-mux',
     player_mux_plugin_version: '[AIV]{version}[/AIV]'
   }, options.data);
 
@@ -269,4 +269,4 @@ const initYourPlayerMux = function (player, options) {
   mux.init(playerID, options);
 };
 
-export default initYourPlayerMux;
+export default initShakaPlayerMux;

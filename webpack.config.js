@@ -4,9 +4,9 @@ const WebpackAutoInject = require('webpack-auto-inject-version');
 module.exports = {
   entry: './src/entry.js',
   output: {
-    filename: 'yourPlayer-mux.js',
+    filename: 'shakaPlayer-mux.js',
     path: path.resolve(__dirname, 'build'),
-    library: 'initYourPlayerMux',
+    library: 'initShakaPlayerMux',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
