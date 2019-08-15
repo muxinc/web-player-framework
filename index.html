@@ -3,6 +3,12 @@
 <head>
   <!-- <script src='http://localhost:8000/dist/shaka-player.compiled.debug.js'></script> -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/shaka-player/2.5.4/shaka-player.compiled.js'></script>
+  <!--
+    Mux.js is an independent library, unreleated to mux.com
+    Mux.js is not required for DASH, but shaka-player might need it to play your HLS content. See:
+    "Why doesn't my HLS content work?" in the FAQ https://github.com/google/shaka-player/blob/master/docs/tutorials/faq.md
+  -->
+  <script defer src="../node_modules/mux.js/dist/mux.js"></script>
 </head>
 <body>
   <div id='playerwrapper1'>
@@ -23,8 +29,8 @@
   <script>
     var manifestUri1 =
      'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-    var manifestUri2 = 'https://content.jwplatform.com/manifests/yp34SRmf.m3u8'
-    // var manifestUri2 = 'https://media-ci.foxford.ru/dist/hls-issue/issue.master.m3u8'
+    var manifestUri2 =
+     'https://stream.mux.com/efCQY2RBifH3EcbdAVPEhFBcndJVkq23.m3u8';
 
     function initApp(id, manifestUri) {
       // Install built-in polyfills to patch browser incompatibilities.
@@ -55,16 +61,16 @@
       });
 
       player.load(manifestUri).catch(function (error) {
-        //
-        // Do your custom error handling logic
-        //
-        //
         loadErrorHandler(error)
+        //
+        // Do your own custom error handling logic
+        //
+        //
       });
     }
 
-    initApp('video1');
-    // initApp('video2');
+    initApp('video1', manifestUri1);
+    initApp('video2', manifestUri2);
   </script>
 </body>
 </html>
