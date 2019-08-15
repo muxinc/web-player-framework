@@ -59,21 +59,6 @@ const initShakaPlayerMux = function (player, options) {
     return secondsToMs(getVideoElementProp('currentTime'));
   };
 
-  // Allow mux to automatically retrieve state information about the player on each event sent
-  // If these properties are not accessible through getters at runtime, you may need to set them
-  // on certain events and store them in a local variable, and return them in the method e.g.
-  //    let playerWidth, playerHeight;
-  //    player.on('resize', (width, height) => {
-  //      playerWidth = width;
-  //      playerHeight = height;
-  //    });
-  //    options.getStateData = () => {
-  //      return {
-  //        ...
-  //        player_width: playerWidth,
-  //        player_height: playerHeight
-  //      };
-  //    };
   options.getStateData = () => {
     return {
       // Required properties - these must be provided every time this is called
@@ -161,21 +146,45 @@ const initShakaPlayerMux = function (player, options) {
     }
   });
 
+  const extractErrorMessage = (error) => {
+    if (error.message) return error.message;
+    const categoryNumber = error.category;
+    let message;
+    try {
+      for (const categoryName in shaka.util.Error.Category) {
+        if (shaka.util.Error.Category[categoryName] === categoryNumber) {
+          message = categoryName
+          break;
+        }
+      }
+    } catch (e) {
+      log.warn('[shakaPlayer-mux] Error converting category to error message', e);
+    }
+    return message || categoryNumber;
+  };
+
+  const handleError = function (error) {
+    player.mux.emit('error', {
+      player_error_code: error && error.code, // The code of the error
+      player_error_message: error && extractErrorMessage(error) // The message of the error
+    });
+  };
+
   // Emit the `error` event when the current playback has encountered a fatal
   // error. Ensure to pass the error code and error message to Mux in this
   // event. You _must_ include at least one of error code and error message
   // (but both is better)
   player.addEventListener('error', (event) => {
     const error = event.detail;
-
-    player.mux.emit('error', {
-      player_error_code: error && error.code, // The code of the error
-      player_error_message: error && error.message // The message of the error
-    });
+    handleError(error);
   });
+
+  const loadErrorHandler = handleError;
 
   // Lastly, initialize the tracking
   mux.init(playerID, options);
+  return loadErrorHandler;
 };
+
 
 export default initShakaPlayerMux;
