@@ -52,9 +52,12 @@
       const player = new shaka.Player(video);
       window[`player_${id}`] = player;
       window[id] = video;
+      const playerInitTime = Date.now();
       const loadErrorHandler = initShakaPlayerMux(player, {
         debug: true,
         data: {
+          player_name: 'My awesome player',
+          player_init_time: playerInitTime,
           env_key: 'YOUR_ENV_KEY',
           video_title: 'SAMPLE_TITLE'
         }
