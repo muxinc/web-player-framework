@@ -5,7 +5,7 @@ import mux from 'mux-embed';
 const log = mux.log;
 const secondsToMs = mux.utils.secondsToMs;
 const assign = mux.utils.assign;
-// const getTimestamp = mux.utils.getTimestamp; // If necessary for playing event
+// const clock = mux.utils.clock; // If necessary for playing event
 // const getComputedStyle = mux.utils.getComputedStyle; // If necessary to get
 
 // Helper function to generate "unique" IDs for the player if your player does not have one built in
@@ -131,7 +131,7 @@ const initYourPlayerMux = function (player, options) {
 
       // Listen for the first time update to be able to send PLAYING
       let sendPlaying = (data) => {
-        const now = getTimestamp();
+        const now = clock.now();
         const currentTime = player.getCurrentTime();
         const timeDiff = currentTime - playTime;
 
